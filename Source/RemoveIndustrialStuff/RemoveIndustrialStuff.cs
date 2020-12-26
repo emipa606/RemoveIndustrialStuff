@@ -143,7 +143,7 @@ namespace RemoveIndustrialStuff
                 DefDatabase<PawnKindDef>.AllDefs
                     .Where(pkd =>
                         (!pkd.defaultFactionType?.isPlayer ?? false) &&
-                        (pkd.race.techLevel > MAX_TECHLEVEL || pkd.defaultFactionType?.techLevel > MAX_TECHLEVEL))
+                        (pkd.race.techLevel > MAX_TECHLEVEL))
                     .Cast<Def>());
             }
 
