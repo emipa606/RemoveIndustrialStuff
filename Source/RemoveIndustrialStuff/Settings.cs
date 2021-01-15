@@ -20,6 +20,8 @@ namespace RemoveIndustrialStuff
             listing_Standard.CheckboxLabeled("Limit factions", ref LimitFactions, "Removes all factions tagged with tech-level industrial");
             listing_Standard.CheckboxLabeled("Limit pawnkinds", ref LimitPawns, "Removes all pawnkinds tagged with tech-level industrial");
             listing_Standard.Gap(gap);
+            listing_Standard.CheckboxLabeled("Log removed items", ref LogRemovals, "Logs all removed items at game-start");
+            listing_Standard.Gap(gap);
             listing_Standard.Label("NOTE: Any changes require a restart to have effect");
             listing_Standard.End();
         }
@@ -31,11 +33,13 @@ namespace RemoveIndustrialStuff
             Scribe_Values.Look(ref LimitResearch, "LimitResearch", true, false);
             Scribe_Values.Look(ref LimitFactions, "LimitFactions", true, false);
             Scribe_Values.Look(ref LimitPawns, "LimitPawns", true, false);
+            Scribe_Values.Look(ref LogRemovals, "LogRemovals", false, false);
         }
 
         public bool LimitItems = true;
         public bool LimitResearch = true;
         public bool LimitFactions = true;
         public bool LimitPawns = true;
+        public bool LogRemovals = false;
     }
 }

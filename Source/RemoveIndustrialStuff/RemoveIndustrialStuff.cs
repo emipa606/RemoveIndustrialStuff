@@ -153,7 +153,14 @@ namespace RemoveIndustrialStuff
                 RemoveStuffFromDatabase(typeof(DefDatabase<FactionDef>),
                     DefDatabase<FactionDef>.AllDefs.Where(fd => !fd.isPlayer && fd.techLevel > MAX_TECHLEVEL).Cast<Def>());
             }
-            Log.Message("Removed " + removedDefs + " industrial defs");
+            if (ModStuff.Settings.LogRemovals)
+            {
+                Log.Message(DebugString.ToString());
+            }
+            else
+            {
+                Log.Message("Removed " + removedDefs + " industrial defs");
+            }
 
             PawnWeaponGenerator.Reset();
             PawnApparelGenerator.Reset();

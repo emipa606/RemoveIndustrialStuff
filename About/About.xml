@@ -21,7 +21,7 @@
   </loadAfter>
   <description>[img]https://i.imgur.com/WAEzk68.png[/img]
 	
-- Options to remove industrial items, research, factions and pawnkinds
+- Options to remove industrial (and greater) items, research, factions and pawnkinds
 - Based heavily on the mod Lord of the Rims - The Third Age
 
 [table]
@@ -30,5 +30,17 @@
         [td][url=https://github.com/emipa606/RemoveIndustrialStuff][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
     [/tr]
 [/table]
+
+
+[img]https://i.imgur.com/Rs6T6cr.png[/img]
+[list]
+[*] See if the the error persists if you just have this mod and its requirements active.
+[*] If not, try adding your other mods until it happens again.
+[*] Post your error-log using [url=https://steamcommunity.com/workshop/filedetails/?id=818773962]HugsLib[/url] and command Ctrl+F12
+[*] For best support, please use the Discord-channel for error-reporting.
+[*] Do not report errors by making a discussion-thread, I get no notification of that.
+[*] If you have the solution for a problem, please post it to the GitHub repository.
+[/list]
 </description>
 </ModMetaData>
+
