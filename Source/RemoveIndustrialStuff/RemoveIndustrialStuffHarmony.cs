@@ -12,30 +12,26 @@ namespace RemoveIndustrialStuff
         static RemoveIndustrialStuffHarmony()
         {
             var harmony = new Harmony("Mlie.RemoveIndustrialStuff");
-            harmony.Patch(AccessTools.Method(typeof(ThingSetMaker), "Generate", new[] {typeof(ThingSetMakerParams)}),
-                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ItemCollectionGeneratorGeneratePrefix)));
-            //Log.Message("AddToTradeables");
-            harmony.Patch(AccessTools.Method(typeof(TradeDeal), "AddToTradeables"),
-                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(PostCacheTradeables)));
-            //Log.Message("CanGenerate");
-            harmony.Patch(AccessTools.Method(typeof(ThingSetMakerUtility), nameof(ThingSetMakerUtility.CanGenerate)),
-                null, new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ThingSetCleaner)));
-            harmony.Patch(AccessTools.Method(typeof(FactionManager), "FirstFactionOfDef", new[] {typeof(FactionDef)}),
-                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(FactionManagerFirstFactionOfDefPrefix)));
+            harmony.Patch(AccessTools.Method(typeof(ThingSetMaker), "Generate", new[] { typeof(ThingSetMakerParams) }), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ItemCollectionGeneratorGeneratePrefix)));
 
-            harmony.Patch(AccessTools.Method(typeof(BackCompatibility), "FactionManagerPostLoadInit", new Type[] { }),
-                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony),
-                    nameof(BackCompatibilityFactionManagerPostLoadInitPrefix)));
+            // Log.Message("AddToTradeables");
+            harmony.Patch(AccessTools.Method(typeof(TradeDeal), "AddToTradeables"), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(PostCacheTradeables)));
+
+            // Log.Message("CanGenerate");
+            harmony.Patch(AccessTools.Method(typeof(ThingSetMakerUtility), nameof(ThingSetMakerUtility.CanGenerate)), null, new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ThingSetCleaner)));
+            harmony.Patch(AccessTools.Method(typeof(FactionManager), "FirstFactionOfDef", new[] { typeof(FactionDef) }), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(FactionManagerFirstFactionOfDefPrefix)));
+
+            harmony.Patch(AccessTools.Method(typeof(BackCompatibility), "FactionManagerPostLoadInit", new Type[] { }), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(BackCompatibilityFactionManagerPostLoadInitPrefix)));
         }
 
-        public static void ThingSetCleaner(ThingDef thingDef, ref bool __result)
+        public static bool BackCompatibilityFactionManagerPostLoadInitPrefix()
         {
-            __result &= !RemoveIndustrialStuff.things.Contains(thingDef);
+            return !ModStuff.Settings.LimitFactions;
         }
 
-        public static bool PostCacheTradeables(Thing t)
+        public static bool FactionManagerFirstFactionOfDefPrefix(ref FactionDef facDef)
         {
-            return !RemoveIndustrialStuff.things.Contains(t.def);
+            return !ModStuff.Settings.LimitFactions || facDef == null || facDef.techLevel <= RemoveIndustrialStuff.MAX_TECHLEVEL;
         }
 
         public static void ItemCollectionGeneratorGeneratePrefix(ref ThingSetMakerParams parms)
@@ -46,15 +42,14 @@ namespace RemoveIndustrialStuff
             }
         }
 
-        public static bool FactionManagerFirstFactionOfDefPrefix(ref FactionDef facDef)
+        public static bool PostCacheTradeables(Thing t)
         {
-            return !ModStuff.Settings.LimitFactions || facDef == null ||
-                   facDef.techLevel <= RemoveIndustrialStuff.MAX_TECHLEVEL;
+            return !RemoveIndustrialStuff.things.Contains(t.def);
         }
 
-        public static bool BackCompatibilityFactionManagerPostLoadInitPrefix()
+        public static void ThingSetCleaner(ThingDef thingDef, ref bool __result)
         {
-            return !ModStuff.Settings.LimitFactions;
+            __result &= !RemoveIndustrialStuff.things.Contains(thingDef);
         }
     }
 }
