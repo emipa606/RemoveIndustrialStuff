@@ -34,11 +34,12 @@ namespace RemoveIndustrialStuff
                 projects = DefDatabase<ResearchProjectDef>.AllDefs.Where(rpd => rpd.techLevel > MAX_TECHLEVEL);
             }
 
-            var extraDefsToRemove = new List<string>();
 
             if (ModStuff.Settings.LimitItems)
             {
-                things = new HashSet<ThingDef>(DefDatabase<ThingDef>.AllDefs.Where(td => td.techLevel > MAX_TECHLEVEL || extraDefsToRemove.Contains(td.defName) || (td.researchPrerequisites?.Any(rpd => projects.Contains(rpd)) ?? false) || new string[] { }.Contains(td.defName)));
+                things = new HashSet<ThingDef>(DefDatabase<ThingDef>.AllDefs.Where(td =>
+                    td.techLevel > MAX_TECHLEVEL ||
+                    (td.researchPrerequisites?.Any(rpd => projects.Contains(rpd)) ?? false)));
             }
 
             DebugString.AppendLine("RecipeDef Removal List");
@@ -59,18 +60,20 @@ namespace RemoveIndustrialStuff
             RemoveStuffFromDatabase(typeof(DefDatabase<ResearchProjectDef>), projects);
 
             DebugString.AppendLine("Scenario Part Removal List");
-            var getThingInfo = typeof(ScenPart_ThingCount).GetField("thingDef", BindingFlags.NonPublic | BindingFlags.Instance);
+            var getThingInfo =
+                typeof(ScenPart_ThingCount).GetField("thingDef", BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var def in DefDatabase<ScenarioDef>.AllDefs)
             {
                 foreach (var sp in def.scenario.AllParts)
                 {
-                    if (!(sp is ScenPart_ThingCount) || !things.Contains((ThingDef)getThingInfo?.GetValue(sp)))
+                    if (!(sp is ScenPart_ThingCount) || !things.Contains((ThingDef) getThingInfo?.GetValue(sp)))
                     {
                         continue;
                     }
 
                     def.scenario.RemovePart(sp);
-                    DebugString.AppendLine("- " + sp.Label + " " + ((ThingDef)getThingInfo?.GetValue(sp))?.label + " from " + def.label);
+                    DebugString.AppendLine("- " + sp.Label + " " + ((ThingDef) getThingInfo?.GetValue(sp))?.label +
+                                           " from " + def.label);
                 }
             }
 
@@ -88,16 +91,20 @@ namespace RemoveIndustrialStuff
 
                     switch (stockGenerator)
                     {
-                        case StockGenerator_SingleDef sd when things.Contains(Traverse.Create(sd).Field("thingDef").GetValue<ThingDef>()):
+                        case StockGenerator_SingleDef sd
+                            when things.Contains(Traverse.Create(sd).Field("thingDef").GetValue<ThingDef>()):
                             var def = Traverse.Create(sd).Field("thingDef").GetValue<ThingDef>();
                             tkd.stockGenerators.Remove(stockGenerator);
-                            DebugString.AppendLine("- " + def.label + " from " + tkd.label + "'s StockGenerator_SingleDef");
+                            DebugString.AppendLine("- " + def.label + " from " + tkd.label +
+                                                   "'s StockGenerator_SingleDef");
                             break;
                         case StockGenerator_MultiDef md:
                             var thingListTraverse = Traverse.Create(md).Field("thingDefs");
                             var thingList = thingListTraverse.GetValue<List<ThingDef>>();
                             var removeList = thingList.FindAll(things.Contains);
-                            removeList.ForEach(x => DebugString.AppendLine("- " + x.label + " from " + tkd.label + "'s StockGenerator_MultiDef"));
+                            removeList.ForEach(x =>
+                                DebugString.AppendLine("- " + x.label + " from " + tkd.label +
+                                                       "'s StockGenerator_MultiDef"));
                             thingList.RemoveAll(things.Contains);
 
                             if (thingList.NullOrEmpty())
@@ -121,7 +128,8 @@ namespace RemoveIndustrialStuff
             ThingSetMakerUtility.Reset();
 
             DebugString.AppendLine("Designators Resolved Again");
-            var resolveDesignatorsAgain = typeof(DesignationCategoryDef).GetMethod("ResolveDesignators", BindingFlags.NonPublic | BindingFlags.Instance);
+            var resolveDesignatorsAgain = typeof(DesignationCategoryDef).GetMethod("ResolveDesignators",
+                BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var dcd in DefDatabase<DesignationCategoryDef>.AllDefs)
             {
                 resolveDesignatorsAgain?.Invoke(dcd, null);
@@ -130,17 +138,24 @@ namespace RemoveIndustrialStuff
             if (ModStuff.Settings.LimitPawns)
             {
                 DebugString.AppendLine("PawnKindDef Removal List");
-                RemoveStuffFromDatabase(typeof(DefDatabase<PawnKindDef>), DefDatabase<PawnKindDef>.AllDefs.Where(pkd => (!pkd.defaultFactionType?.isPlayer ?? false) && pkd.race.techLevel > MAX_TECHLEVEL));
+                RemoveStuffFromDatabase(typeof(DefDatabase<PawnKindDef>),
+                    DefDatabase<PawnKindDef>.AllDefs.Where(pkd =>
+                        (!pkd.defaultFactionType?.isPlayer ?? false) && pkd.race.techLevel > MAX_TECHLEVEL));
             }
 
             if (ModStuff.Settings.LimitFactions)
             {
                 DebugString.AppendLine("FactionDef Removal List");
 
-                RemoveStuffFromDatabase(typeof(DefDatabase<FactionDef>), DefDatabase<FactionDef>.AllDefs.Where(fd => !fd.isPlayer && fd.techLevel > MAX_TECHLEVEL));
+                RemoveStuffFromDatabase(typeof(DefDatabase<FactionDef>),
+                    DefDatabase<FactionDef>.AllDefs.Where(fd => !fd.isPlayer && fd.techLevel > MAX_TECHLEVEL));
                 if (ModLister.RoyaltyInstalled)
                 {
-                    RemoveStuffFromDatabase(typeof(DefDatabase<IncidentDef>), new List<Def> { DefDatabase<IncidentDef>.GetNamedSilentFail("CaravanArrivalTributeCollector") });
+                    var incident = DefDatabase<IncidentDef>.GetNamedSilentFail("CaravanArrivalTributeCollector");
+                    if (incident != null)
+                    {
+                        RemoveStuffFromDatabase(typeof(DefDatabase<IncidentDef>), new List<Def> {incident});
+                    }
                 }
 
                 // foreach (var factionDef in DefDatabase<FactionDef>.AllDefs.Where(fd => !fd.isPlayer && fd.techLevel > MAX_TECHLEVEL))

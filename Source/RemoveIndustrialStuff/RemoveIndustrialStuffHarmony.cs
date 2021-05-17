@@ -12,16 +12,23 @@ namespace RemoveIndustrialStuff
         static RemoveIndustrialStuffHarmony()
         {
             var harmony = new Harmony("Mlie.RemoveIndustrialStuff");
-            harmony.Patch(AccessTools.Method(typeof(ThingSetMaker), "Generate", new[] { typeof(ThingSetMakerParams) }), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ItemCollectionGeneratorGeneratePrefix)));
+            harmony.Patch(AccessTools.Method(typeof(ThingSetMaker), "Generate", new[] {typeof(ThingSetMakerParams)}),
+                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ItemCollectionGeneratorGeneratePrefix)));
 
             // Log.Message("AddToTradeables");
-            harmony.Patch(AccessTools.Method(typeof(TradeDeal), "AddToTradeables"), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(PostCacheTradeables)));
+            harmony.Patch(AccessTools.Method(typeof(TradeDeal), "AddToTradeables"),
+                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(PostCacheTradeables)));
 
             // Log.Message("CanGenerate");
-            harmony.Patch(AccessTools.Method(typeof(ThingSetMakerUtility), nameof(ThingSetMakerUtility.CanGenerate)), null, new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ThingSetCleaner)));
-            harmony.Patch(AccessTools.Method(typeof(FactionManager), "FirstFactionOfDef", new[] { typeof(FactionDef) }), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(FactionManagerFirstFactionOfDefPrefix)));
+            harmony.Patch(AccessTools.Method(typeof(ThingSetMakerUtility), nameof(ThingSetMakerUtility.CanGenerate)),
+                null, new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ThingSetCleaner)));
+            harmony.Patch(AccessTools.Method(typeof(FactionManager), "FirstFactionOfDef", new[] {typeof(FactionDef)}),
+                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(FactionManagerFirstFactionOfDefPrefix)));
 
-            harmony.Patch(AccessTools.Method(typeof(BackCompatibility), "FactionManagerPostLoadInit", new Type[] { }), new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(BackCompatibilityFactionManagerPostLoadInitPrefix)));
+            harmony.Patch(
+                AccessTools.Method(typeof(BackCompatibility), "FactionManagerPostLoadInit", Array.Empty<Type>()),
+                new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony),
+                    nameof(BackCompatibilityFactionManagerPostLoadInitPrefix)));
         }
 
         public static bool BackCompatibilityFactionManagerPostLoadInitPrefix()
@@ -31,7 +38,8 @@ namespace RemoveIndustrialStuff
 
         public static bool FactionManagerFirstFactionOfDefPrefix(ref FactionDef facDef)
         {
-            return !ModStuff.Settings.LimitFactions || facDef == null || facDef.techLevel <= RemoveIndustrialStuff.MAX_TECHLEVEL;
+            return !ModStuff.Settings.LimitFactions || facDef == null ||
+                   facDef.techLevel <= RemoveIndustrialStuff.MAX_TECHLEVEL;
         }
 
         public static void ItemCollectionGeneratorGeneratePrefix(ref ThingSetMakerParams parms)
