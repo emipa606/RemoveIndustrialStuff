@@ -19,15 +19,20 @@ namespace RemoveIndustrialStuff
         public void DoWindowContents(Rect canvas)
         {
             var gap = 8f;
-            var listing_Standard = new Listing_Standard { ColumnWidth = canvas.width };
+            var listing_Standard = new Listing_Standard {ColumnWidth = canvas.width};
             listing_Standard.Begin(canvas);
             listing_Standard.Gap(gap);
-            listing_Standard.CheckboxLabeled("Limit items", ref LimitItems, "Removes all items tagged with tech-level industrial");
-            listing_Standard.CheckboxLabeled("Limit research", ref LimitResearch, "Removes all research-projects tagged with tech-level industrial");
-            listing_Standard.CheckboxLabeled("Limit factions", ref LimitFactions, "Removes all factions tagged with tech-level industrial");
-            listing_Standard.CheckboxLabeled("Limit pawnkinds", ref LimitPawns, "Removes all pawnkinds tagged with tech-level industrial");
+            listing_Standard.CheckboxLabeled("Limit items", ref LimitItems,
+                "Removes all items tagged with tech-level industrial");
+            listing_Standard.CheckboxLabeled("Limit research", ref LimitResearch,
+                "Removes all research-projects tagged with tech-level industrial");
+            listing_Standard.CheckboxLabeled("Limit factions", ref LimitFactions,
+                "Removes all factions tagged with tech-level industrial");
+            listing_Standard.CheckboxLabeled("Limit pawnkinds", ref LimitPawns,
+                "Removes all pawnkinds tagged with tech-level industrial");
             listing_Standard.Gap(gap);
-            listing_Standard.CheckboxLabeled("Log removed items", ref LogRemovals, "Logs all removed items at game-start");
+            listing_Standard.CheckboxLabeled("Log removed items", ref LogRemovals,
+                "Logs all removed items at game-start");
             listing_Standard.Gap(gap);
             listing_Standard.Label("NOTE: Any changes require a restart to have effect");
             listing_Standard.End();
