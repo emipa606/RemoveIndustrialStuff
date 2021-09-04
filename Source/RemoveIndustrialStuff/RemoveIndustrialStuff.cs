@@ -66,13 +66,13 @@ namespace RemoveIndustrialStuff
             {
                 foreach (var sp in def.scenario.AllParts)
                 {
-                    if (!(sp is ScenPart_ThingCount) || !things.Contains((ThingDef) getThingInfo?.GetValue(sp)))
+                    if (!(sp is ScenPart_ThingCount) || !things.Contains((ThingDef)getThingInfo?.GetValue(sp)))
                     {
                         continue;
                     }
 
                     def.scenario.RemovePart(sp);
-                    DebugString.AppendLine("- " + sp.Label + " " + ((ThingDef) getThingInfo?.GetValue(sp))?.label +
+                    DebugString.AppendLine("- " + sp.Label + " " + ((ThingDef)getThingInfo?.GetValue(sp))?.label +
                                            " from " + def.label);
                 }
             }
@@ -147,6 +147,14 @@ namespace RemoveIndustrialStuff
             {
                 DebugString.AppendLine("FactionDef Removal List");
 
+                foreach (var factionDef in DefDatabase<FactionDef>.AllDefsListForReading.Where(def =>
+                    def.defName.ToLower().Contains("refugee") && def.techLevel > MAX_TECHLEVEL))
+                {
+                    DebugString.AppendLine(
+                        $"Lowering tech-level of {factionDef.label} since its a refugee-faction needed for quests");
+                    factionDef.techLevel = MAX_TECHLEVEL;
+                }
+
                 RemoveStuffFromDatabase(typeof(DefDatabase<FactionDef>),
                     DefDatabase<FactionDef>.AllDefs.Where(fd => !fd.isPlayer && fd.techLevel > MAX_TECHLEVEL));
                 if (ModLister.RoyaltyInstalled)
@@ -154,7 +162,7 @@ namespace RemoveIndustrialStuff
                     var incident = DefDatabase<IncidentDef>.GetNamedSilentFail("CaravanArrivalTributeCollector");
                     if (incident != null)
                     {
-                        RemoveStuffFromDatabase(typeof(DefDatabase<IncidentDef>), new List<Def> {incident});
+                        RemoveStuffFromDatabase(typeof(DefDatabase<IncidentDef>), new List<Def> { incident });
                     }
                 }
 

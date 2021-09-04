@@ -1,5 +1,8 @@
 # Changelog for RemoveIndustrialStuff
 
+1.0.7.0 - Fixed an issue with the faction for refugee-quests
+
+
 1.0.6.0 - Mod updated for 1.3 and passed autotests
 
 
