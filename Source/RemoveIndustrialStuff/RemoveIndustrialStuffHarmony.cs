@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -12,7 +11,7 @@ public static class RemoveIndustrialStuffHarmony
     static RemoveIndustrialStuffHarmony()
     {
         var harmony = new Harmony("Mlie.RemoveIndustrialStuff");
-        harmony.Patch(AccessTools.Method(typeof(ThingSetMaker), "Generate", new[] { typeof(ThingSetMakerParams) }),
+        harmony.Patch(AccessTools.Method(typeof(ThingSetMaker), "Generate", [typeof(ThingSetMakerParams)]),
             new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ItemCollectionGeneratorGeneratePrefix)));
 
         // Log.Message("AddToTradeables");
@@ -22,11 +21,11 @@ public static class RemoveIndustrialStuffHarmony
         // Log.Message("CanGenerate");
         harmony.Patch(AccessTools.Method(typeof(ThingSetMakerUtility), nameof(ThingSetMakerUtility.CanGenerate)),
             null, new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(ThingSetCleaner)));
-        harmony.Patch(AccessTools.Method(typeof(FactionManager), "FirstFactionOfDef", new[] { typeof(FactionDef) }),
+        harmony.Patch(AccessTools.Method(typeof(FactionManager), "FirstFactionOfDef", [typeof(FactionDef)]),
             new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony), nameof(FactionManagerFirstFactionOfDefPrefix)));
 
         harmony.Patch(
-            AccessTools.Method(typeof(BackCompatibility), "FactionManagerPostLoadInit", Array.Empty<Type>()),
+            AccessTools.Method(typeof(BackCompatibility), "FactionManagerPostLoadInit", []),
             new HarmonyMethod(typeof(RemoveIndustrialStuffHarmony),
                 nameof(BackCompatibilityFactionManagerPostLoadInitPrefix)));
     }
@@ -38,8 +37,7 @@ public static class RemoveIndustrialStuffHarmony
 
     public static bool FactionManagerFirstFactionOfDefPrefix(ref FactionDef facDef)
     {
-        return !ModStuff.Settings.LimitFactions || facDef == null ||
-               facDef.techLevel <= RemoveIndustrialStuff.MAX_TECHLEVEL;
+        return !ModStuff.Settings.LimitFactions || facDef is not { techLevel: > RemoveIndustrialStuff.MAX_TECHLEVEL };
     }
 
     public static void ItemCollectionGeneratorGeneratePrefix(ref ThingSetMakerParams parms)

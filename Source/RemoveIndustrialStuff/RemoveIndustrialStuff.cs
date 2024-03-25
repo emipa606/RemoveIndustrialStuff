@@ -66,7 +66,7 @@ public static class RemoveIndustrialStuff
         {
             foreach (var sp in def.scenario.AllParts)
             {
-                if (!(sp is ScenPart_ThingCount) || !things.Contains((ThingDef)getThingInfo?.GetValue(sp)))
+                if (sp is not ScenPart_ThingCount || !things.Contains((ThingDef)getThingInfo?.GetValue(sp)))
                 {
                     continue;
                 }
