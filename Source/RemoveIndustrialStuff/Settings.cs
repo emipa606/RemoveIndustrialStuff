@@ -17,32 +17,32 @@ public class Settings : ModSettings
 
     public void DoWindowContents(Rect canvas)
     {
-        var gap = 8f;
-        var listing_Standard = new Listing_Standard { ColumnWidth = canvas.width };
-        listing_Standard.Begin(canvas);
-        listing_Standard.Gap(gap);
-        listing_Standard.CheckboxLabeled("RIS.LimitItems".Translate(), ref LimitItems,
+        const float gap = 8f;
+        var listingStandard = new Listing_Standard { ColumnWidth = canvas.width };
+        listingStandard.Begin(canvas);
+        listingStandard.Gap(gap);
+        listingStandard.CheckboxLabeled("RIS.LimitItems".Translate(), ref LimitItems,
             "RIS.LimitItems.Desc".Translate());
-        listing_Standard.CheckboxLabeled("RIS.LimitResearch".Translate(), ref LimitResearch,
+        listingStandard.CheckboxLabeled("RIS.LimitResearch".Translate(), ref LimitResearch,
             "RIS.LimitResearch.Desc".Translate());
-        listing_Standard.CheckboxLabeled("RIS.LimitFactions".Translate(), ref LimitFactions,
+        listingStandard.CheckboxLabeled("RIS.LimitFactions".Translate(), ref LimitFactions,
             "RIS.LimitFactions.Desc".Translate());
-        listing_Standard.CheckboxLabeled("RIS.LimitPawnKinds".Translate(), ref LimitPawns,
+        listingStandard.CheckboxLabeled("RIS.LimitPawnKinds".Translate(), ref LimitPawns,
             "RIS.LimitPawnKinds.Desc".Translate());
-        listing_Standard.Gap(gap);
-        listing_Standard.CheckboxLabeled("RIS.LogRemovals".Translate(), ref LogRemovals,
+        listingStandard.Gap(gap);
+        listingStandard.CheckboxLabeled("RIS.LogRemovals".Translate(), ref LogRemovals,
             "RIS.LogRemovals.Desc".Translate());
-        listing_Standard.Gap(gap);
-        listing_Standard.Label("RIS.RestartInfo".Translate());
+        listingStandard.Gap(gap);
+        listingStandard.Label("RIS.RestartInfo".Translate());
         if (ModStuff.currentVersion != null)
         {
-            listing_Standard.Gap();
+            listingStandard.Gap();
             GUI.contentColor = Color.gray;
-            listing_Standard.Label("RIS.CurrentModVersion".Translate(ModStuff.currentVersion));
+            listingStandard.Label("RIS.CurrentModVersion".Translate(ModStuff.currentVersion));
             GUI.contentColor = Color.white;
         }
 
-        listing_Standard.End();
+        listingStandard.End();
     }
 
     public override void ExposeData()

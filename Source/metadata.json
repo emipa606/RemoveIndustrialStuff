@@ -2,5 +2,15 @@
   "Continued": false,
   "CanAdd": "0",
   "CanRemove": "0",
-  "PreviewVersion": "1.5"
+  "PreviewVersion": "1.6",
+  "Patches": false,
+  "Defs": false,
+  "Assemblies": true,
+  "LinesOfCode": 13565,
+  "LinesOfXML": 0,
+  "CodeBaseSize": 66,
+  "LastXmlCleaning": "2025-07-06T20:02:58.9608825+02:00",
+  "SocialImageSet": true,
+  "FundingSet": true,
+  "SearchTags": " research"
 }
